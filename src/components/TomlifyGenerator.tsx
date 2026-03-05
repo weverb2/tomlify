@@ -6,6 +6,7 @@ const TomlifyGenerator: React.FC = () => {
   const [selectedPluginIds, setSelectedPluginIds] = useState<Set<string>>(new Set());
   const [search, setSearch] = useState('');
   const [onlyKmp, setOnlyKmp] = useState(false);
+  const [versionType, setVersionType] = useState<'stable' | 'latest'>('stable');
 
   const toggleLibrary = (id: string) => {
     const next = new Set(selectedLibIds);
@@ -48,6 +49,10 @@ const TomlifyGenerator: React.FC = () => {
     let toml = '[versions]\n';
     const versionsAdded = new Set<string>();
 
+    const getVersion = (item: Library | Plugin) => {
+      return versionType === 'stable' ? item.stableVersion : item.latestVersion;
+    };
+
     const addVersion = (id: string, version: string) => {
       const vKey = id.replace(/-/g, '_');
       if (version && !versionsAdded.has(vKey)) {
@@ -56,15 +61,15 @@ const TomlifyGenerator: React.FC = () => {
       }
     };
 
-    selectedLibs.forEach(lib => addVersion(lib.id, lib.version));
-    selectedPlugins.forEach(p => addVersion(p.id, p.version));
+    selectedLibs.forEach(lib => addVersion(lib.id, getVersion(lib)));
+    selectedPlugins.forEach(p => addVersion(p.id, getVersion(p)));
 
     if (selectedLibs.length > 0) {
       toml += '\n[libraries]\n';
       selectedLibs.forEach(lib => {
         const libKey = lib.id.replace(/-/g, '_');
         const vKey = lib.id.replace(/-/g, '_');
-        if (lib.version) {
+        if (getVersion(lib)) {
           toml += `${libKey} = { group = "${lib.group}", name = "${lib.artifact}", version.ref = "${vKey}" }\n`;
         } else {
           toml += `${libKey} = { group = "${lib.group}", name = "${lib.artifact}" }\n`;
@@ -98,14 +103,32 @@ const TomlifyGenerator: React.FC = () => {
             onChange={(e) => setSearch(e.target.value)}
             className="search-input"
           />
-          <label className="kmp-toggle">
-            <input 
-              type="checkbox" 
-              checked={onlyKmp} 
-              onChange={(e) => setOnlyKmp(e.target.checked)} 
-            />
-            <span>Show KMP only</span>
-          </label>
+          
+          <div className="toggle-group">
+            <label className="filter-toggle">
+              <input 
+                type="checkbox" 
+                checked={onlyKmp} 
+                onChange={(e) => setOnlyKmp(e.target.checked)} 
+              />
+              <span>Show KMP only</span>
+            </label>
+
+            <div className="version-selector">
+              <button 
+                className={versionType === 'stable' ? 'active' : ''} 
+                onClick={() => setVersionType('stable')}
+              >
+                Stable
+              </button>
+              <button 
+                className={versionType === 'latest' ? 'active' : ''} 
+                onClick={() => setVersionType('latest')}
+              >
+                Latest
+              </button>
+            </div>
+          </div>
         </div>
         
         <div className="library-list">
@@ -122,11 +145,17 @@ const TomlifyGenerator: React.FC = () => {
                   <div className="library-info">
                     <div className="library-header">
                       <span className="library-name">{lib.name}</span>
-                      {lib.kmpPlatforms && (
-                        <span className="kmp-badge">KMP</span>
-                      )}
+                      <div className="badge-row">
+                        {lib.kmpPlatforms && <span className="kmp-badge">KMP</span>}
+                        {lib.latestVersion !== lib.stableVersion && versionType === 'latest' && (
+                          <span className="preview-badge">Preview</span>
+                        )}
+                      </div>
                     </div>
                     <span className="library-desc">{lib.description}</span>
+                    <span className="version-info">
+                      {versionType === 'stable' ? lib.stableVersion : lib.latestVersion}
+                    </span>
                   </div>
                 </label>
               ))}
@@ -150,8 +179,14 @@ const TomlifyGenerator: React.FC = () => {
                   <div className="library-info">
                     <div className="library-header">
                       <span className="library-name">{plugin.name}</span>
+                      {plugin.latestVersion !== plugin.stableVersion && versionType === 'latest' && (
+                        <span className="preview-badge">Preview</span>
+                      )}
                     </div>
                     <span className="library-desc">{plugin.description}</span>
+                    <span className="version-info">
+                      {versionType === 'stable' ? plugin.stableVersion : plugin.latestVersion}
+                    </span>
                   </div>
                 </label>
               ))}
@@ -209,18 +244,44 @@ const TomlifyGenerator: React.FC = () => {
         .search-input {
           width: 100%;
           padding: 0.75rem;
-          margin-bottom: 0.75rem;
+          margin-bottom: 1rem;
           border: 1px solid #ced4da;
           border-radius: 4px;
           font-size: 1rem;
         }
-        .kmp-toggle {
+        .toggle-group {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        .filter-toggle {
           display: flex;
           align-items: center;
           gap: 0.5rem;
-          font-size: 0.9rem;
+          font-size: 0.85rem;
           cursor: pointer;
           color: #495057;
+        }
+        .version-selector {
+          display: flex;
+          background: #e9ecef;
+          padding: 2px;
+          border-radius: 6px;
+        }
+        .version-selector button {
+          border: none;
+          background: transparent;
+          padding: 4px 12px;
+          font-size: 0.75rem;
+          font-weight: 600;
+          cursor: pointer;
+          border-radius: 4px;
+          color: #6c757d;
+        }
+        .version-selector button.active {
+          background: white;
+          color: #212529;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
         .library-list {
           overflow-y: auto;
@@ -263,7 +324,7 @@ const TomlifyGenerator: React.FC = () => {
         .library-info {
           display: flex;
           flex-direction: column;
-          gap: 0.25rem;
+          gap: 0.15rem;
           flex-grow: 1;
         }
         .library-header {
@@ -272,6 +333,10 @@ const TomlifyGenerator: React.FC = () => {
           justify-content: space-between;
           gap: 0.5rem;
         }
+        .badge-row {
+          display: flex;
+          gap: 4px;
+        }
         .library-name {
           font-weight: 600;
           font-size: 0.95rem;
@@ -279,15 +344,29 @@ const TomlifyGenerator: React.FC = () => {
         .kmp-badge {
           background: #3ddc84;
           color: #073042;
-          font-size: 0.7rem;
+          font-size: 0.65rem;
+          font-weight: 800;
+          padding: 1px 4px;
+          border-radius: 3px;
+        }
+        .preview-badge {
+          background: #ffc107;
+          color: #000;
+          font-size: 0.65rem;
           font-weight: 800;
           padding: 1px 4px;
           border-radius: 3px;
         }
         .library-desc {
-          font-size: 0.8rem;
+          font-size: 0.75rem;
           color: #6c757d;
           line-height: 1.3;
+        }
+        .version-info {
+          font-size: 0.7rem;
+          font-family: monospace;
+          color: #0d6efd;
+          font-weight: 600;
         }
         .sidebar-footer {
           margin-top: 1.5rem;

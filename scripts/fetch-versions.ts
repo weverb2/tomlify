@@ -6,7 +6,7 @@ import { LIBRARIES, PLUGINS, type Library, type Plugin } from '../src/data/libra
 const GOOGLE_MAVEN = 'https://dl.google.com/dl/android/maven2';
 const MAVEN_CENTRAL = 'https://repo1.maven.org/maven2';
 
-async function fetchLatestVersion(group: string, artifact: string, currentVersion: string): Promise<string> {
+async function fetchMetadata(group: string, artifact: string): Promise<{ stable: string, latest: string } | null> {
   const groupPath = group.replace(/\./g, '/');
   const url = group.startsWith('androidx') || group.startsWith('com.google') || group.startsWith('com.android')
     ? `${GOOGLE_MAVEN}/${groupPath}/${artifact}/maven-metadata.xml`
@@ -14,27 +14,33 @@ async function fetchLatestVersion(group: string, artifact: string, currentVersio
 
   try {
     const response = await fetch(url);
-    if (!response.ok) return currentVersion;
+    if (!response.ok) return null;
     
     const xml = await response.text();
     const result = await parseStringPromise(xml);
-    return result.metadata.versioning[0].release?.[0] || result.metadata.versioning[0].latest?.[0] || currentVersion;
+    const versioning = result.metadata.versioning[0];
+    
+    return {
+      stable: versioning.release?.[0] || versioning.latest?.[0],
+      latest: versioning.latest?.[0] || versioning.release?.[0]
+    };
   } catch (e) {
-    return currentVersion;
+    return null;
   }
 }
 
 async function updateVersions() {
-  console.log('Fetching latest versions...');
+  console.log('Fetching latest and stable versions...');
   
   const updatedLibs = await Promise.all(LIBRARIES.map(async (lib) => {
-    if (lib.version === '' && lib.id !== 'compose-bom') return lib;
-    const latest = await fetchLatestVersion(lib.group, lib.artifact, lib.version);
-    return { ...lib, version: latest };
+    if (lib.stableVersion === '' && lib.id !== 'compose-bom') return lib;
+    const meta = await fetchMetadata(lib.group, lib.artifact);
+    if (!meta) return lib;
+    console.log(`- ${lib.name}: Stable: ${meta.stable}, Latest: ${meta.latest}`);
+    return { ...lib, stableVersion: meta.stable, latestVersion: meta.latest };
   }));
 
   const updatedPlugins = await Promise.all(PLUGINS.map(async (p) => {
-    // Attempt to fetch version if we can map the plugin to a maven group/artifact
     let group = '', artifact = '';
     if (p.pluginId.startsWith('org.jetbrains.kotlin')) {
       group = 'org.jetbrains.kotlin';
@@ -42,14 +48,11 @@ async function updateVersions() {
     } else if (p.pluginId.startsWith('androidx')) {
       group = p.pluginId;
       artifact = p.id;
-    } else if (p.id === 'sqldelight-runtime') {
-       group = 'app.cash.sqldelight';
-       artifact = 'runtime';
     }
 
     if (group && artifact) {
-      const latest = await fetchLatestVersion(group, artifact, p.version);
-      return { ...p, version: latest };
+      const meta = await fetchMetadata(group, artifact);
+      if (meta) return { ...p, stableVersion: meta.stable, latestVersion: meta.latest };
     }
     return p;
   }));
@@ -60,7 +63,8 @@ async function updateVersions() {
   name: string;
   group: string;
   artifact: string;
-  version: string;
+  stableVersion: string;
+  latestVersion: string;
   description: string;
   category: 'Compose' | 'Networking' | 'Architecture' | 'UI' | 'Testing' | 'Utilities' | 'DI' | 'Data' | 'KMP';
   kmpPlatforms?: string[];
@@ -70,7 +74,8 @@ export interface Plugin {
   id: string;
   name: string;
   pluginId: string;
-  version: string;
+  stableVersion: string;
+  latestVersion: string;
   description: string;
   category: 'Compiler Plugin' | 'KSP Processor';
 }
