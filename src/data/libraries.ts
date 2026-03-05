@@ -286,6 +286,26 @@ export const LIBRARIES: Library[] = [
     "category": "DI"
   },
   {
+    "id": "metro-runtime",
+    "name": "Metro Runtime",
+    "group": "dev.zacsweers.metro",
+    "artifact": "runtime",
+    "stableVersion": "0.11.2",
+    "latestVersion": "0.11.2",
+    "description": "A compile-time dependency injection framework for Kotlin",
+    "category": "DI",
+    "kmpPlatforms": [
+      "android",
+      "ios",
+      "jvm",
+      "wasm",
+      "js",
+      "macos",
+      "linux",
+      "windows"
+    ]
+  },
+  {
     "id": "junit",
     "name": "JUnit 4",
     "group": "junit",
@@ -340,6 +360,17 @@ export const LIBRARIES: Library[] = [
 ];
 
 export const PLUGINS: Plugin[] = [
+  {
+    "id": "metro",
+    "name": "Metro DI",
+    "pluginId": "dev.zacsweers.metro",
+    "group": "dev.zacsweers.metro",
+    "artifact": "gradle-plugin",
+    "stableVersion": "0.11.2",
+    "latestVersion": "0.11.2",
+    "description": "Metro DI Compiler Plugin",
+    "category": "Compiler Plugin"
+  },
   {
     "id": "android-application",
     "name": "Android Application",
