@@ -1,19 +1,24 @@
 import React, { useState, useMemo } from 'react';
-import { LIBRARIES, type Library } from '../data/libraries';
+import { LIBRARIES, PLUGINS, type Library, type Plugin } from '../data/libraries';
 
 const TomlifyGenerator: React.FC = () => {
-  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [selectedLibIds, setSelectedLibIds] = useState<Set<string>>(new Set());
+  const [selectedPluginIds, setSelectedPluginIds] = useState<Set<string>>(new Set());
   const [search, setSearch] = useState('');
   const [onlyKmp, setOnlyKmp] = useState(false);
 
   const toggleLibrary = (id: string) => {
-    const next = new Set(selectedIds);
-    if (next.has(id)) {
-      next.delete(id);
-    } else {
-      next.add(id);
-    }
-    setSelectedIds(next);
+    const next = new Set(selectedLibIds);
+    if (next.has(id)) next.delete(id);
+    else next.add(id);
+    setSelectedLibIds(next);
+  };
+
+  const togglePlugin = (id: string) => {
+    const next = new Set(selectedPluginIds);
+    if (next.has(id)) next.delete(id);
+    else next.add(id);
+    setSelectedPluginIds(next);
   };
 
   const filteredLibraries = useMemo(() => {
@@ -25,34 +30,62 @@ const TomlifyGenerator: React.FC = () => {
     });
   }, [search, onlyKmp]);
 
+  const filteredPlugins = useMemo(() => {
+    return PLUGINS.filter(plugin => 
+      plugin.name.toLowerCase().includes(search.toLowerCase()) ||
+      plugin.description.toLowerCase().includes(search.toLowerCase())
+    );
+  }, [search]);
+
   const generateToml = () => {
-    const selected = LIBRARIES.filter(lib => selectedIds.has(lib.id));
-    if (selected.length === 0) return '# Select dependencies to generate libs.versions.toml';
+    const selectedLibs = LIBRARIES.filter(lib => selectedLibIds.has(lib.id));
+    const selectedPlugins = PLUGINS.filter(p => selectedPluginIds.has(p.id));
+
+    if (selectedLibs.length === 0 && selectedPlugins.length === 0) {
+      return '# Select dependencies or plugins to generate libs.versions.toml';
+    }
 
     let toml = '[versions]\n';
-    selected.forEach(lib => {
-      if (lib.version) {
-        const vKey = lib.id.replace(/-/g, '_');
-        toml += `${vKey} = "${lib.version}"\n`;
-      }
-    });
+    const versionsAdded = new Set<string>();
 
-    toml += '\n[libraries]\n';
-    selected.forEach(lib => {
-      const libKey = lib.id.replace(/-/g, '_');
-      const vKey = lib.id.replace(/-/g, '_');
-      
-      if (lib.version) {
-        toml += `${libKey} = { group = "${lib.group}", name = "${lib.artifact}", version.ref = "${vKey}" }\n`;
-      } else {
-        toml += `${libKey} = { group = "${lib.group}", name = "${lib.artifact}" }\n`;
+    const addVersion = (id: string, version: string) => {
+      const vKey = id.replace(/-/g, '_');
+      if (version && !versionsAdded.has(vKey)) {
+        toml += `${vKey} = "${version}"\n`;
+        versionsAdded.add(vKey);
       }
-    });
+    };
+
+    selectedLibs.forEach(lib => addVersion(lib.id, lib.version));
+    selectedPlugins.forEach(p => addVersion(p.id, p.version));
+
+    if (selectedLibs.length > 0) {
+      toml += '\n[libraries]\n';
+      selectedLibs.forEach(lib => {
+        const libKey = lib.id.replace(/-/g, '_');
+        const vKey = lib.id.replace(/-/g, '_');
+        if (lib.version) {
+          toml += `${libKey} = { group = "${lib.group}", name = "${lib.artifact}", version.ref = "${vKey}" }\n`;
+        } else {
+          toml += `${libKey} = { group = "${lib.group}", name = "${lib.artifact}" }\n`;
+        }
+      });
+    }
+
+    if (selectedPlugins.length > 0) {
+      toml += '\n[plugins]\n';
+      selectedPlugins.forEach(p => {
+        const pKey = p.id.replace(/-/g, '_');
+        const vKey = p.id.replace(/-/g, '_');
+        toml += `${pKey} = { id = "${p.pluginId}", version.ref = "${vKey}" }\n`;
+      });
+    }
 
     return toml;
   };
 
-  const categories = Array.from(new Set(filteredLibraries.map(l => l.category)));
+  const libCategories = Array.from(new Set(filteredLibraries.map(l => l.category)));
+  const pluginCategories = Array.from(new Set(filteredPlugins.map(p => p.category)));
 
   return (
     <div className="generator-container">
@@ -60,7 +93,7 @@ const TomlifyGenerator: React.FC = () => {
         <div className="filter-controls">
           <input 
             type="text" 
-            placeholder="Search dependencies..." 
+            placeholder="Search everything..." 
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="search-input"
@@ -76,32 +109,49 @@ const TomlifyGenerator: React.FC = () => {
         </div>
         
         <div className="library-list">
-          {categories.map(category => (
+          {libCategories.map(category => (
             <div key={category} className="category-section">
               <h3>{category}</h3>
               {filteredLibraries.filter(l => l.category === category).map(lib => (
                 <label key={lib.id} className="library-item">
                   <input 
                     type="checkbox" 
-                    checked={selectedIds.has(lib.id)}
+                    checked={selectedLibIds.has(lib.id)}
                     onChange={() => toggleLibrary(lib.id)}
                   />
                   <div className="library-info">
                     <div className="library-header">
                       <span className="library-name">{lib.name}</span>
                       {lib.kmpPlatforms && (
-                        <span className="kmp-badge" title={lib.kmpPlatforms.join(', ')}>KMP</span>
+                        <span className="kmp-badge">KMP</span>
                       )}
                     </div>
                     <span className="library-desc">{lib.description}</span>
-                    {lib.kmpPlatforms && (
-                      <div className="platform-tags">
-                        {lib.kmpPlatforms.slice(0, 4).map(p => (
-                          <span key={p} className="platform-tag">{p}</span>
-                        ))}
-                        {lib.kmpPlatforms.length > 4 && <span className="platform-tag">...</span>}
-                      </div>
-                    )}
+                  </div>
+                </label>
+              ))}
+            </div>
+          ))}
+
+          {pluginCategories.length > 0 && (
+            <div className="category-divider">Plugins & Processors</div>
+          )}
+
+          {pluginCategories.map(category => (
+            <div key={category} className="category-section">
+              <h3 className="plugin-cat">{category}</h3>
+              {filteredPlugins.filter(p => p.category === category).map(plugin => (
+                <label key={plugin.id} className="library-item plugin-item">
+                  <input 
+                    type="checkbox" 
+                    checked={selectedPluginIds.has(plugin.id)}
+                    onChange={() => togglePlugin(plugin.id)}
+                  />
+                  <div className="library-info">
+                    <div className="library-header">
+                      <span className="library-name">{plugin.name}</span>
+                    </div>
+                    <span className="library-desc">{plugin.description}</span>
                   </div>
                 </label>
               ))}
@@ -111,12 +161,12 @@ const TomlifyGenerator: React.FC = () => {
 
         <div className="sidebar-footer">
           <a 
-            href="https://github.com/bwever/tomlify/issues/new?title=Library+Request&body=Please+add+this+library:%0A%0A- Name:%0A- Group:%0A- Artifact:%0A- Category:"
+            href="https://github.com/bwever/tomlify/issues/new?title=Library+Request"
             target="_blank"
             rel="noopener noreferrer"
             className="request-link"
           >
-            + Request a library
+            + Request more
           </a>
         </div>
       </div>
@@ -128,7 +178,7 @@ const TomlifyGenerator: React.FC = () => {
             onClick={() => navigator.clipboard.writeText(generateToml())}
             className="copy-button"
           >
-            Copy to Clipboard
+            Copy
           </button>
         </div>
         <pre className="toml-preview">
@@ -177,12 +227,26 @@ const TomlifyGenerator: React.FC = () => {
           flex-grow: 1;
           padding-right: 0.5rem;
         }
+        .category-divider {
+          margin: 2rem 0 1rem;
+          padding: 0.5rem;
+          background: #e9ecef;
+          border-radius: 4px;
+          font-size: 0.75rem;
+          font-weight: 800;
+          text-transform: uppercase;
+          text-align: center;
+          color: #495057;
+        }
         .category-section h3 {
           margin: 1.5rem 0 0.75rem;
           font-size: 0.85rem;
           text-transform: uppercase;
           color: #6c757d;
           letter-spacing: 0.05em;
+        }
+        .plugin-cat {
+          color: #0d6efd !important;
         }
         .library-item {
           display: flex;
@@ -224,20 +288,6 @@ const TomlifyGenerator: React.FC = () => {
           font-size: 0.8rem;
           color: #6c757d;
           line-height: 1.3;
-        }
-        .platform-tags {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 4px;
-          margin-top: 4px;
-        }
-        .platform-tag {
-          font-size: 0.65rem;
-          background: #e9ecef;
-          color: #495057;
-          padding: 1px 6px;
-          border-radius: 10px;
-          border: 1px solid #dee2e6;
         }
         .sidebar-footer {
           margin-top: 1.5rem;
