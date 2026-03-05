@@ -1,43 +1,37 @@
-# Astro Starter Kit: Minimal
+# tomlify 🚀
 
-```sh
-npm create astro@latest -- --template minimal
-```
+The super-fast Android dependency catalog (`libs.versions.toml`) generator.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Built with **Astro**, **React**, and a lot of Kotlin love.
 
-## 🚀 Project Structure
+## Features ✨
 
-Inside of your Astro project, you'll see the following folders and files:
+- **Automated Versions**: Every Monday, a GitHub Action fetches the absolute latest versions from Google Maven and Maven Central.
+- **Stable vs. Latest**: Toggle between true stable releases and bleeding-edge previews (alpha/beta/rc).
+- **KMP Ready**: Filter for Kotlin Multiplatform compatible libraries with platform tags.
+- **Smart Plugins**: Handles Gradle plugins and KSP processors with correct ID-to-Maven mappings.
+- **Search & Filter**: Find exactly what you need in seconds.
+- **Copy-Paste Ready**: One click to get your perfectly formatted TOML.
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+## Live Demo 🌍
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+[https://bwever.github.io/tomlify/](https://bwever.github.io/tomlify/)
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+## How it works 🛠️
 
-Any static assets, like images, can be placed in the `public/` directory.
+1. **`src/data/libraries.ts`**: The source of truth for the library and plugin catalog.
+2. **`scripts/fetch-versions.ts`**: A build-time script that crawls Maven repositories to find the latest stable and preview versions.
+3. **GitHub Actions**: Automatically runs the fetcher and deploys a fresh static site every week.
 
-## 🧞 Commands
+## Contributing 🤝
 
-All commands are run from the root of the project, from a terminal:
+Want to add a library? 
+- Open an issue using the "+ Request more" link on the site.
+- Or submit a PR updating `src/data/libraries.ts`.
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+## Tech Stack 💻
 
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- [Astro](https://astro.build/) - Static Site Generation
+- [React](https://reactjs.org/) - Interactive UI
+- [tsx](https://github.com/privatenumber/tsx) - Script execution
+- [GitHub Actions](https://github.com/features/actions) - Automation & Deployment

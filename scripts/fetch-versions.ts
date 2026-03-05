@@ -10,8 +10,6 @@ const PRE_RELEASE_KEYWORDS = ['alpha', 'beta', 'rc', 'dev', 'm', 'snapshot', 'pr
 
 function isStable(version: string): boolean {
   const v = version.toLowerCase();
-  // Most stable versions are purely numeric segments: 1.2.3
-  // If there's a hyphen, it's almost always a pre-release in the Android world: 1.2.3-alpha01
   return !PRE_RELEASE_KEYWORDS.some(k => v.includes('-' + k) || v.includes('.' + k) || v.includes(k + '0') || v.includes(k + '.'));
 }
 
@@ -33,14 +31,8 @@ async function fetchMetadata(group: string, artifact: string): Promise<{ stable:
       const allVersions: string[] = versioning.versions[0].version;
       
       const latest = versioning.latest?.[0] || allVersions[allVersions.length - 1];
-      
-      // Strict backwards search for stable
       let stable = [...allVersions].reverse().find(isStable);
-
-      // If no stable version found in history, fallback to latest
-      if (!stable) {
-        stable = latest;
-      }
+      if (!stable) stable = latest;
 
       return { stable, latest };
     } catch (e) {
@@ -57,21 +49,21 @@ async function updateVersions() {
     if (lib.artifact === '') return lib;
     const meta = await fetchMetadata(lib.group, lib.artifact);
     if (!meta) return lib;
-    if (meta.stable !== meta.latest) {
-      console.log(`- ${lib.name}: STABLE ${meta.stable} | LATEST ${meta.latest}`);
-    }
     return { ...lib, stableVersion: meta.stable, latestVersion: meta.latest };
   }));
 
   const updatedPlugins = await Promise.all(PLUGINS.map(async (p) => {
-    const group = p.group || p.pluginId;
-    const artifact = p.artifact || `${p.pluginId}.gradle.plugin`;
+    let group = p.group || p.pluginId;
+    let artifact = p.artifact || `${p.pluginId}.gradle.plugin`;
+
+    // Special cases for AGP and Spotless
+    if (p.id === 'android-application') {
+      group = 'com.android.tools.build';
+      artifact = 'gradle';
+    }
 
     const meta = await fetchMetadata(group, artifact);
     if (meta) {
-      if (meta.stable !== meta.latest) {
-        console.log(`- Plugin ${p.name}: STABLE ${meta.stable} | LATEST ${meta.latest}`);
-      }
       return { ...p, stableVersion: meta.stable, latestVersion: meta.latest };
     }
     return p;
@@ -86,7 +78,7 @@ async function updateVersions() {
   stableVersion: string;
   latestVersion: string;
   description: string;
-  category: 'Compose' | 'Networking' | 'Architecture' | 'UI' | 'Testing' | 'Utilities' | 'DI' | 'Data' | 'KMP';
+  category: 'Compose' | 'Networking' | 'Architecture' | 'UI' | 'Testing' | 'Utilities' | 'DI' | 'Data' | 'KMP' | 'Core';
   kmpPlatforms?: string[];
 }
 
@@ -99,7 +91,7 @@ export interface Plugin {
   stableVersion: string;
   latestVersion: string;
   description: string;
-  category: 'Compiler Plugin' | 'KSP Processor';
+  category: 'Compiler Plugin' | 'KSP Processor' | 'Build Tool';
 }
 
 export const LIBRARIES: Library[] = ${JSON.stringify(updatedLibs, null, 2)};

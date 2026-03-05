@@ -6,7 +6,7 @@ export interface Library {
   stableVersion: string;
   latestVersion: string;
   description: string;
-  category: 'Compose' | 'Networking' | 'Architecture' | 'UI' | 'Testing' | 'Utilities' | 'DI' | 'Data' | 'KMP';
+  category: 'Compose' | 'Networking' | 'Architecture' | 'UI' | 'Testing' | 'Utilities' | 'DI' | 'Data' | 'KMP' | 'Core';
   kmpPlatforms?: string[];
 }
 
@@ -19,120 +19,226 @@ export interface Plugin {
   stableVersion: string;
   latestVersion: string;
   description: string;
-  category: 'Compiler Plugin' | 'KSP Processor';
+  category: 'Compiler Plugin' | 'KSP Processor' | 'Build Tool';
 }
 
 export const LIBRARIES: Library[] = [
   {
-    "id": "compose-multiplatform",
-    "name": "Compose Multiplatform",
-    "group": "org.jetbrains.compose.runtime",
-    "artifact": "runtime",
-    "stableVersion": "1.10.2",
-    "latestVersion": "1.11.0-alpha03",
-    "description": "Declarative UI for Android, iOS, Desktop, and Web",
-    "category": "Compose",
-    "kmpPlatforms": [
-      "android",
-      "ios",
-      "jvm",
-      "js",
-      "wasm"
-    ]
+    "id": "androidx-core-ktx",
+    "name": "Core KTX",
+    "group": "androidx.core",
+    "artifact": "core-ktx",
+    "stableVersion": "1.17.0",
+    "latestVersion": "1.18.0-rc01",
+    "description": "Kotlin extensions for Android core",
+    "category": "Core"
   },
   {
-    "id": "voyager-navigator",
-    "name": "Voyager",
-    "group": "cafe.adriel.voyager",
-    "artifact": "voyager-navigator",
+    "id": "androidx-lifecycle-runtime-ktx",
+    "name": "Lifecycle Runtime KTX",
+    "group": "androidx.lifecycle",
+    "artifact": "lifecycle-runtime-ktx",
+    "stableVersion": "2.10.0",
+    "latestVersion": "2.11.0-alpha01",
+    "description": "Lifecycle-aware Kotlin extensions",
+    "category": "Core"
+  },
+  {
+    "id": "androidx-activity-compose",
+    "name": "Activity Compose",
+    "group": "androidx.activity",
+    "artifact": "activity-compose",
+    "stableVersion": "1.12.4",
+    "latestVersion": "1.13.0-rc01",
+    "description": "Compose integration for Activity",
+    "category": "Compose"
+  },
+  {
+    "id": "androidx-compose-bom",
+    "name": "Compose BOM",
+    "group": "androidx.compose",
+    "artifact": "compose-bom",
+    "stableVersion": "2026.02.01",
+    "latestVersion": "2026.02.01",
+    "description": "Bill of Materials for Compose",
+    "category": "Compose"
+  },
+  {
+    "id": "androidx-compose-ui",
+    "name": "Compose UI",
+    "group": "androidx.compose.ui",
+    "artifact": "ui",
+    "stableVersion": "1.10.4",
+    "latestVersion": "1.11.0-alpha06",
+    "description": "Main Compose UI library",
+    "category": "Compose"
+  },
+  {
+    "id": "androidx-compose-ui-graphics",
+    "name": "Compose UI Graphics",
+    "group": "androidx.compose.ui",
+    "artifact": "ui-graphics",
+    "stableVersion": "1.10.4",
+    "latestVersion": "1.11.0-alpha06",
+    "description": "Compose Graphics",
+    "category": "Compose"
+  },
+  {
+    "id": "androidx-compose-ui-tooling",
+    "name": "Compose UI Tooling",
+    "group": "androidx.compose.ui",
+    "artifact": "ui-tooling",
+    "stableVersion": "1.10.4",
+    "latestVersion": "1.11.0-alpha06",
+    "description": "Compose Tooling (Debug)",
+    "category": "Compose"
+  },
+  {
+    "id": "androidx-compose-ui-tooling-preview",
+    "name": "Compose UI Tooling Preview",
+    "group": "androidx.compose.ui",
+    "artifact": "ui-tooling-preview",
+    "stableVersion": "1.10.4",
+    "latestVersion": "1.11.0-alpha06",
+    "description": "Compose Tooling Preview",
+    "category": "Compose"
+  },
+  {
+    "id": "androidx-compose-material3",
+    "name": "Material 3",
+    "group": "androidx.compose.material3",
+    "artifact": "material3",
+    "stableVersion": "1.4.0",
+    "latestVersion": "1.5.0-alpha15",
+    "description": "Material Design 3 for Compose",
+    "category": "Compose"
+  },
+  {
+    "id": "androidx-compose-material-icons",
+    "name": "Material Icons Extended",
+    "group": "androidx.compose.material",
+    "artifact": "material-icons-extended",
+    "stableVersion": "1.7.8",
+    "latestVersion": "1.7.8",
+    "description": "Full set of Material icons",
+    "category": "Compose"
+  },
+  {
+    "id": "androidx-navigation3-runtime",
+    "name": "Navigation3 Runtime",
+    "group": "androidx.navigation3",
+    "artifact": "navigation3-runtime",
     "stableVersion": "1.0.1",
-    "latestVersion": "1.1.0-beta03",
-    "description": "Pragmatic navigation library for Compose",
-    "category": "UI",
-    "kmpPlatforms": [
-      "android",
-      "ios",
-      "jvm",
-      "js",
-      "wasm"
-    ]
+    "latestVersion": "1.1.0-alpha05",
+    "description": "The next generation of Navigation",
+    "category": "Architecture"
   },
   {
-    "id": "decompose",
-    "name": "Decompose",
-    "group": "com.arkivanov.decompose",
-    "artifact": "decompose",
-    "stableVersion": "3.4.0",
-    "latestVersion": "3.5.0-beta01",
-    "description": "Lifecycle-aware component routing for KMP",
-    "category": "Architecture",
-    "kmpPlatforms": [
-      "android",
-      "ios",
-      "jvm",
-      "js",
-      "wasm",
-      "macos",
-      "linux",
-      "windows"
-    ]
+    "id": "androidx-navigation3-ui",
+    "name": "Navigation3 UI",
+    "group": "androidx.navigation3",
+    "artifact": "navigation3-ui",
+    "stableVersion": "1.0.1",
+    "latestVersion": "1.1.0-alpha05",
+    "description": "UI for Navigation3",
+    "category": "Architecture"
+  },
+  {
+    "id": "androidx-hilt-navigation",
+    "name": "Hilt Navigation Compose",
+    "group": "androidx.hilt",
+    "artifact": "hilt-navigation-compose",
+    "stableVersion": "1.3.0",
+    "latestVersion": "1.3.0",
+    "description": "Hilt integration for Compose Navigation",
+    "category": "DI"
   },
   {
     "id": "coil-compose",
-    "name": "Coil 3",
+    "name": "Coil Compose",
     "group": "io.coil-kt.coil3",
     "artifact": "coil-compose",
     "stableVersion": "3.4.0",
     "latestVersion": "3.4.0",
-    "description": "Image loading library for Android and KMP",
+    "description": "Image loading for Compose",
     "category": "UI",
     "kmpPlatforms": [
       "android",
       "ios",
       "jvm",
-      "js",
-      "wasm",
-      "macos"
+      "wasm"
     ]
   },
   {
-    "id": "lottie-compose",
-    "name": "Lottie Compose",
-    "group": "com.airbnb.android",
-    "artifact": "lottie-compose",
-    "stableVersion": "6.7.1",
-    "latestVersion": "6.7.1",
-    "description": "Lottie animations for Jetpack Compose",
-    "category": "UI"
+    "id": "coil-network-okhttp",
+    "name": "Coil OkHttp",
+    "group": "io.coil-kt.coil3",
+    "artifact": "coil-network-okhttp",
+    "stableVersion": "3.4.0",
+    "latestVersion": "3.4.0",
+    "description": "OkHttp engine for Coil 3",
+    "category": "UI",
+    "kmpPlatforms": [
+      "android",
+      "ios",
+      "jvm"
+    ]
   },
   {
     "id": "ktor-client-core",
-    "name": "Ktor Client 3",
+    "name": "Ktor Client",
     "group": "io.ktor",
     "artifact": "ktor-client-core",
     "stableVersion": "3.4.1",
     "latestVersion": "3.4.1",
-    "description": "Async HTTP client with WASM and GraphQL support",
+    "description": "Async HTTP client",
     "category": "Networking",
     "kmpPlatforms": [
       "android",
       "ios",
       "jvm",
       "js",
-      "wasm",
-      "macos",
-      "linux",
-      "windows"
+      "wasm"
     ]
   },
   {
-    "id": "retrofit",
-    "name": "Retrofit",
-    "group": "com.squareup.retrofit2",
-    "artifact": "retrofit",
-    "stableVersion": "3.0.0",
-    "latestVersion": "3.0.0",
-    "description": "Type-safe HTTP client for Android and JVM",
+    "id": "ktor-client-okhttp",
+    "name": "Ktor OkHttp Engine",
+    "group": "io.ktor",
+    "artifact": "ktor-client-okhttp",
+    "stableVersion": "3.4.1",
+    "latestVersion": "3.4.1",
+    "description": "OkHttp engine for Ktor",
+    "category": "Networking"
+  },
+  {
+    "id": "ktor-client-content-negotiation",
+    "name": "Ktor Content Negotiation",
+    "group": "io.ktor",
+    "artifact": "ktor-client-content-negotiation",
+    "stableVersion": "3.4.1",
+    "latestVersion": "3.4.1",
+    "description": "Content negotiation for Ktor",
+    "category": "Networking"
+  },
+  {
+    "id": "ktor-serialization-kotlinx-json",
+    "name": "Ktor Kotlinx JSON",
+    "group": "io.ktor",
+    "artifact": "ktor-serialization-kotlinx-json",
+    "stableVersion": "3.4.1",
+    "latestVersion": "3.4.1",
+    "description": "Kotlinx Serialization for Ktor",
+    "category": "Networking"
+  },
+  {
+    "id": "ktor-client-logging",
+    "name": "Ktor Logging",
+    "group": "io.ktor",
+    "artifact": "ktor-client-logging",
+    "stableVersion": "3.4.1",
+    "latestVersion": "3.4.1",
+    "description": "Logging for Ktor",
     "category": "Networking"
   },
   {
@@ -142,340 +248,153 @@ export const LIBRARIES: Library[] = [
     "artifact": "kotlinx-serialization-json",
     "stableVersion": "1.10.0",
     "latestVersion": "1.10.0",
-    "description": "Native Kotlin JSON serialization",
+    "description": "JSON serialization",
     "category": "Utilities",
     "kmpPlatforms": [
       "android",
       "ios",
       "jvm",
       "js",
-      "wasm",
-      "macos",
-      "linux",
-      "windows"
-    ]
-  },
-  {
-    "id": "apollo-runtime",
-    "name": "Apollo Kotlin",
-    "group": "com.apollographql.apollo3",
-    "artifact": "apollo-runtime",
-    "stableVersion": "3.8.6",
-    "latestVersion": "4.0.0-beta.7",
-    "description": "Strongly-typed GraphQL client for Kotlin",
-    "category": "Networking",
-    "kmpPlatforms": [
-      "android",
-      "ios",
-      "jvm",
-      "js",
-      "macos",
-      "linux",
-      "windows"
-    ]
-  },
-  {
-    "id": "okhttp",
-    "name": "OkHttp",
-    "group": "com.squareup.okhttp3",
-    "artifact": "okhttp",
-    "stableVersion": "5.3.2",
-    "latestVersion": "5.3.2",
-    "description": "HTTP client and engine for Android and JVM",
-    "category": "Networking"
-  },
-  {
-    "id": "room-runtime",
-    "name": "Room 2.7+",
-    "group": "androidx.room",
-    "artifact": "room-runtime",
-    "stableVersion": "2.8.4",
-    "latestVersion": "2.8.4",
-    "description": "Google persistence library with KMP support",
-    "category": "Data",
-    "kmpPlatforms": [
-      "android",
-      "ios",
-      "jvm",
-      "macos",
-      "linux"
-    ]
-  },
-  {
-    "id": "sqldelight-runtime",
-    "name": "SQLDelight",
-    "group": "app.cash.sqldelight",
-    "artifact": "runtime",
-    "stableVersion": "2.2.1",
-    "latestVersion": "2.2.1",
-    "description": "Typesafe SQL API generation from SQL statements",
-    "category": "Data",
-    "kmpPlatforms": [
-      "android",
-      "ios",
-      "jvm",
-      "js",
-      "macos",
-      "linux",
-      "windows"
-    ]
-  },
-  {
-    "id": "datastore-preferences",
-    "name": "DataStore",
-    "group": "androidx.datastore",
-    "artifact": "datastore-preferences-core",
-    "stableVersion": "1.2.0",
-    "latestVersion": "1.3.0-alpha06",
-    "description": "Modern, reactive key-value storage replacement",
-    "category": "Data",
-    "kmpPlatforms": [
-      "android",
-      "ios",
-      "jvm",
-      "js",
-      "macos",
-      "linux",
-      "windows"
-    ]
-  },
-  {
-    "id": "multiplatform-settings",
-    "name": "Multiplatform Settings",
-    "group": "com.russhwolf",
-    "artifact": "multiplatform-settings",
-    "stableVersion": "1.3.0",
-    "latestVersion": "1.3.0",
-    "description": "Unified key-value storage wrapper for KMP",
-    "category": "Data",
-    "kmpPlatforms": [
-      "android",
-      "ios",
-      "jvm",
-      "js",
-      "macos",
-      "linux",
-      "windows"
-    ]
-  },
-  {
-    "id": "koin-core",
-    "name": "Koin 4",
-    "group": "io.insert-koin",
-    "artifact": "koin-core",
-    "stableVersion": "4.1.1",
-    "latestVersion": "4.2.0-RC1",
-    "description": "Pragmatic lightweight DI framework for KMP",
-    "category": "DI",
-    "kmpPlatforms": [
-      "android",
-      "ios",
-      "jvm",
-      "js",
-      "wasm",
-      "macos",
-      "linux",
-      "windows"
+      "wasm"
     ]
   },
   {
     "id": "hilt-android",
-    "name": "Hilt",
+    "name": "Hilt Android",
     "group": "com.google.dagger",
     "artifact": "hilt-android",
     "stableVersion": "2.59.2",
     "latestVersion": "2.59.2",
-    "description": "Recommended DI solution for Android apps",
+    "description": "DI for Android",
     "category": "DI"
   },
   {
-    "id": "orbit-core",
-    "name": "Orbit MVI",
-    "group": "org.orbit-mvi",
-    "artifact": "orbit-core",
-    "stableVersion": "11.0.0",
-    "latestVersion": "11.0.0",
-    "description": "Low-boilerplate MVI framework using Kotlin Flow",
-    "category": "Architecture",
-    "kmpPlatforms": [
-      "android",
-      "ios",
-      "jvm",
-      "macos",
-      "linux",
-      "windows"
-    ]
+    "id": "hilt-android-compiler",
+    "name": "Hilt Android Compiler",
+    "group": "com.google.dagger",
+    "artifact": "hilt-android-compiler",
+    "stableVersion": "2.59.2",
+    "latestVersion": "2.59.2",
+    "description": "Hilt Compiler (KSP/Kapt)",
+    "category": "DI"
   },
   {
-    "id": "kotlinx-coroutines-core",
-    "name": "Kotlinx Coroutines",
-    "group": "org.jetbrains.kotlinx",
-    "artifact": "kotlinx-coroutines-core",
-    "stableVersion": "1.10.2",
-    "latestVersion": "1.10.2",
-    "description": "Foundational library for async and concurrency",
-    "category": "Architecture",
-    "kmpPlatforms": [
-      "android",
-      "ios",
-      "jvm",
-      "js",
-      "wasm",
-      "macos",
-      "linux",
-      "windows"
-    ]
+    "id": "junit",
+    "name": "JUnit 4",
+    "group": "junit",
+    "artifact": "junit",
+    "stableVersion": "4.13.2",
+    "latestVersion": "4.13.2",
+    "description": "Standard unit testing",
+    "category": "Testing"
   },
   {
-    "id": "napier",
-    "name": "Napier",
-    "group": "io.github.aakira",
-    "artifact": "napier",
-    "stableVersion": "2.7.1",
-    "latestVersion": "2.7.1",
-    "description": "Multiplatform logger mimicking Timber API",
-    "category": "Utilities",
-    "kmpPlatforms": [
-      "android",
-      "ios",
-      "jvm",
-      "js",
-      "wasm",
-      "macos",
-      "linux",
-      "windows"
-    ]
+    "id": "androidx-junit",
+    "name": "AndroidX JUnit",
+    "group": "androidx.test.ext",
+    "artifact": "junit",
+    "stableVersion": "1.3.0",
+    "latestVersion": "1.3.0",
+    "description": "JUnit extensions for Android",
+    "category": "Testing"
   },
   {
-    "id": "kotest-assertions-core",
-    "name": "Kotest",
-    "group": "io.kotest",
-    "artifact": "kotest-assertions-core",
-    "stableVersion": "6.1.4",
-    "latestVersion": "6.1.4",
-    "description": "Comprehensive KMP testing and assertions",
-    "category": "Testing",
-    "kmpPlatforms": [
-      "android",
-      "ios",
-      "jvm",
-      "js",
-      "wasm",
-      "macos",
-      "linux",
-      "windows"
-    ]
+    "id": "androidx-espresso-core",
+    "name": "Espresso Core",
+    "group": "androidx.test.espresso",
+    "artifact": "espresso-core",
+    "stableVersion": "3.7.0",
+    "latestVersion": "3.7.0",
+    "description": "UI testing for Android",
+    "category": "Testing"
   },
   {
-    "id": "compose-bom",
-    "name": "Compose BOM",
-    "group": "androidx.compose",
-    "artifact": "compose-bom",
-    "stableVersion": "2026.02.01",
-    "latestVersion": "2026.02.01",
-    "description": "Bill of Materials for Jetpack Compose libraries",
-    "category": "Compose"
+    "id": "androidx-compose-ui-test-junit4",
+    "name": "Compose UI Test JUnit4",
+    "group": "androidx.compose.ui",
+    "artifact": "ui-test-junit4",
+    "stableVersion": "1.10.4",
+    "latestVersion": "1.11.0-alpha06",
+    "description": "Compose testing support",
+    "category": "Testing"
+  },
+  {
+    "id": "androidx-compose-ui-test-manifest",
+    "name": "Compose UI Test Manifest",
+    "group": "androidx.compose.ui",
+    "artifact": "ui-test-manifest",
+    "stableVersion": "1.10.4",
+    "latestVersion": "1.11.0-alpha06",
+    "description": "Manifest for Compose testing",
+    "category": "Testing"
   }
 ];
 
 export const PLUGINS: Plugin[] = [
   {
-    "id": "compose-compiler",
-    "name": "Compose Compiler",
+    "id": "android-application",
+    "name": "Android Application",
+    "pluginId": "com.android.application",
+    "group": "com.android.tools.build",
+    "artifact": "gradle",
+    "stableVersion": "2.3.0",
+    "latestVersion": "2.3.0",
+    "description": "AGP Application Plugin",
+    "category": "Build Tool"
+  },
+  {
+    "id": "kotlin-compose",
+    "name": "Kotlin Compose Compiler",
     "pluginId": "org.jetbrains.kotlin.plugin.compose",
     "group": "org.jetbrains.kotlin",
     "artifact": "kotlin-stdlib",
     "stableVersion": "2.3.10",
     "latestVersion": "2.3.20-RC2",
-    "description": "Engine behind Jetpack Compose UI optimizations",
+    "description": "Kotlin Compose Plugin",
     "category": "Compiler Plugin"
   },
   {
     "id": "kotlin-serialization",
-    "name": "Kotlinx Serialization",
+    "name": "Kotlin Serialization",
     "pluginId": "org.jetbrains.kotlin.plugin.serialization",
     "group": "org.jetbrains.kotlin",
     "artifact": "kotlin-stdlib",
     "stableVersion": "2.3.10",
     "latestVersion": "2.3.20-RC2",
-    "description": "Efficient JSON/Protobuf visitor code generation",
+    "description": "Kotlin Serialization Plugin",
     "category": "Compiler Plugin"
   },
   {
-    "id": "skie",
-    "name": "SKIE",
-    "pluginId": "co.touchlab.skie",
-    "group": "co.touchlab.skie",
-    "artifact": "co.touchlab.skie.gradle.plugin",
-    "stableVersion": "0.10.10",
-    "latestVersion": "0.10.10",
-    "description": "Bridges Kotlin/Swift for Coroutines and Sealed Classes",
-    "category": "Compiler Plugin"
+    "id": "spotless",
+    "name": "Spotless",
+    "pluginId": "com.diffplug.spotless",
+    "group": "com.diffplug.spotless",
+    "artifact": "spotless-plugin-gradle",
+    "stableVersion": "8.3.0",
+    "latestVersion": "8.3.0",
+    "description": "Code formatting plugin",
+    "category": "Build Tool"
   },
   {
-    "id": "power-assert",
-    "name": "Power-Assert",
-    "pluginId": "com.bnorm.power.kotlin-power-assert",
-    "group": "com.bnorm.power.kotlin-power-assert",
-    "artifact": "com.bnorm.power.kotlin-power-assert.gradle.plugin",
-    "stableVersion": "",
-    "latestVersion": "",
-    "description": "Diagram-like error messages for assert calls",
-    "category": "Compiler Plugin"
+    "id": "ksp",
+    "name": "KSP",
+    "pluginId": "com.google.devtools.ksp",
+    "group": "com.google.devtools.ksp",
+    "artifact": "symbol-processing-api",
+    "stableVersion": "2.3.6",
+    "latestVersion": "2.3.6",
+    "description": "Kotlin Symbol Processing",
+    "category": "Build Tool"
   },
   {
-    "id": "atomicfu",
-    "name": "AtomicFU",
-    "pluginId": "org.jetbrains.kotlinx.atomicfu",
-    "group": "org.jetbrains.kotlin",
-    "artifact": "kotlin-stdlib",
-    "stableVersion": "2.3.10",
-    "latestVersion": "2.3.20-RC2",
-    "description": "Multiplatform API for atomic operations",
-    "category": "Compiler Plugin"
-  },
-  {
-    "id": "room-compiler",
-    "name": "Room KSP",
-    "pluginId": "androidx.room",
-    "group": "androidx.room",
-    "artifact": "room-compiler",
-    "stableVersion": "2.8.4",
-    "latestVersion": "2.8.4",
-    "description": "Generates typesafe persistence code via KSP",
-    "category": "KSP Processor"
-  },
-  {
-    "id": "koin-annotations",
-    "name": "Koin Annotations",
-    "pluginId": "io.insert-koin.koin-annotations",
-    "group": "io.insert-koin",
-    "artifact": "koin-annotations",
-    "stableVersion": "2.3.1",
-    "latestVersion": "4.2.0-RC1",
-    "description": "Compile-time safety for Koin DI",
-    "category": "KSP Processor"
-  },
-  {
-    "id": "moshi-ksp",
-    "name": "Moshi KSP",
-    "pluginId": "com.squareup.moshi.moshi-kotlin-codegen",
-    "group": "com.squareup.moshi",
-    "artifact": "moshi-kotlin-codegen",
-    "stableVersion": "1.15.2",
-    "latestVersion": "1.15.2",
-    "description": "Generates Moshi adapters at compile-time",
-    "category": "KSP Processor"
-  },
-  {
-    "id": "lyricist",
-    "name": "Lyricist",
-    "pluginId": "be.vergauwen.lyricist",
-    "group": "be.vergauwen.lyricist",
-    "artifact": "be.vergauwen.lyricist.gradle.plugin",
-    "stableVersion": "",
-    "latestVersion": "",
-    "description": "Type-safe multiplatform string resources",
-    "category": "KSP Processor"
+    "id": "hilt",
+    "name": "Hilt Gradle Plugin",
+    "pluginId": "com.google.dagger.hilt.android",
+    "group": "com.google.dagger",
+    "artifact": "hilt-android-gradle-plugin",
+    "stableVersion": "2.59.2",
+    "latestVersion": "2.59.2",
+    "description": "Hilt DI Plugin",
+    "category": "Build Tool"
   }
 ];
