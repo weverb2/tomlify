@@ -88,6 +88,7 @@ const TomlifyGenerator: React.FC = () => {
               ))}
             </div>
           );
+        })}
         <div className="sidebar-footer">
           <a 
             href="https://github.com/bwever/tomlify/issues/new?title=Library+Request&body=Please+add+this+library:%0A%0A- Name:%0A- Group:%0A- Artifact:%0A- Category:"
