@@ -386,13 +386,16 @@ const TomlifyGenerator: React.FC = () => {
           border-radius: 8px;
           display: flex;
           flex-direction: column;
-          max-height: 85vh;
+          height: 85vh;
+          position: sticky;
+          top: 1rem;
         }
         .preview-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-bottom: 1rem;
+          flex-shrink: 0;
         }
         .preview-header h2 {
           margin: 0;
@@ -416,8 +419,11 @@ const TomlifyGenerator: React.FC = () => {
           font-family: 'Fira Code', 'Roboto Mono', monospace;
           font-size: 0.9rem;
           line-height: 1.5;
-          overflow-x: auto;
+          overflow: auto;
           flex-grow: 1;
+          background: rgba(0,0,0,0.2);
+          padding: 1rem;
+          border-radius: 4px;
         }
         @media (max-width: 900px) {
           .generator-container {
