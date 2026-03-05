@@ -224,7 +224,7 @@ const TomlifyGenerator: React.FC = () => {
       <style jsx>{`
         .generator-container {
           display: grid;
-          grid-template-columns: 380px 1fr;
+          grid-template-columns: 380px minmax(0, 1fr);
           gap: 2rem;
           min-height: 80vh;
           padding: 1rem;
@@ -237,6 +237,7 @@ const TomlifyGenerator: React.FC = () => {
           display: flex;
           flex-direction: column;
           max-height: 85vh;
+          min-width: 0;
         }
         .filter-controls {
           margin-bottom: 1.5rem;
@@ -389,6 +390,7 @@ const TomlifyGenerator: React.FC = () => {
           height: 85vh;
           position: sticky;
           top: 1rem;
+          min-width: 0;
         }
         .preview-header {
           display: flex;
@@ -424,6 +426,12 @@ const TomlifyGenerator: React.FC = () => {
           background: rgba(0,0,0,0.2);
           padding: 1rem;
           border-radius: 4px;
+          white-space: pre;
+        }
+        .toml-preview code {
+          display: block;
+          width: fit-content;
+          min-width: 100%;
         }
         @media (max-width: 900px) {
           .generator-container {
@@ -434,6 +442,10 @@ const TomlifyGenerator: React.FC = () => {
           }
           .preview-panel {
             max-height: none;
+            position: relative;
+            top: 0;
+            height: auto;
+            min-height: 300px;
           }
         }
       `}</style>
