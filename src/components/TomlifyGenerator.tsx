@@ -88,7 +88,16 @@ const TomlifyGenerator: React.FC = () => {
               ))}
             </div>
           );
-        })}
+        <div className="sidebar-footer">
+          <a 
+            href="https://github.com/bwever/tomlify/issues/new?title=Library+Request&body=Please+add+this+library:%0A%0A- Name:%0A- Group:%0A- Artifact:%0A- Category:"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="request-link"
+          >
+            + Request a library
+          </a>
+        </div>
       </div>
 
       <div className="preview-panel">
@@ -120,6 +129,23 @@ const TomlifyGenerator: React.FC = () => {
           border-radius: 8px;
           border: 1px solid #dee2e6;
           overflow-y: auto;
+          display: flex;
+          flex-direction: column;
+        }
+        .sidebar-footer {
+          margin-top: 2rem;
+          padding-top: 1rem;
+          border-top: 1px solid #dee2e6;
+        }
+        .request-link {
+          color: #3ddc84;
+          text-decoration: none;
+          font-weight: 600;
+          font-size: 0.9rem;
+          display: block;
+        }
+        .request-link:hover {
+          text-decoration: underline;
         }
         .search-input {
           width: 100%;
