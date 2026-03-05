@@ -40,9 +40,9 @@ const TomlifyGenerator: React.FC = () => {
 
   const generateToml = () => {
     const selectedLibs = LIBRARIES.filter(lib => selectedLibIds.has(lib.id));
-    const selectedPlugins = PLUGINS.filter(p => selectedPluginIds.has(p.id));
+    const selectedPluginIds_ = PLUGINS.filter(p => selectedPluginIds.has(p.id));
 
-    if (selectedLibs.length === 0 && selectedPlugins.length === 0) {
+    if (selectedLibs.length === 0 && selectedPluginIds_.length === 0) {
       return '# Select dependencies or plugins to generate libs.versions.toml';
     }
 
@@ -61,15 +61,26 @@ const TomlifyGenerator: React.FC = () => {
       }
     };
 
-    selectedLibs.forEach(lib => addVersion(lib.id, getVersion(lib)));
-    selectedPlugins.forEach(p => addVersion(p.id, getVersion(p)));
+    // Only add versions for libraries NOT managed by a selected BOM
+    selectedLibs.forEach(lib => {
+      const isManagedBySelectedBom = lib.managedBy && selectedLibIds.has(lib.managedBy);
+      if (!isManagedBySelectedBom) {
+        addVersion(lib.id, getVersion(lib));
+      }
+    });
+    
+    selectedPluginIds_.forEach(p => addVersion(p.id, getVersion(p)));
 
     if (selectedLibs.length > 0) {
       toml += '\n[libraries]\n';
       selectedLibs.forEach(lib => {
         const libKey = lib.id.replace(/-/g, '_');
         const vKey = lib.id.replace(/-/g, '_');
-        if (getVersion(lib)) {
+        const isManagedBySelectedBom = lib.managedBy && selectedLibIds.has(lib.managedBy);
+
+        if (isManagedBySelectedBom) {
+          toml += `${libKey} = { group = "${lib.group}", name = "${lib.artifact}" }\n`;
+        } else if (getVersion(lib)) {
           toml += `${libKey} = { group = "${lib.group}", name = "${lib.artifact}", version.ref = "${vKey}" }\n`;
         } else {
           toml += `${libKey} = { group = "${lib.group}", name = "${lib.artifact}" }\n`;
@@ -77,9 +88,9 @@ const TomlifyGenerator: React.FC = () => {
       });
     }
 
-    if (selectedPlugins.length > 0) {
+    if (selectedPluginIds_.length > 0) {
       toml += '\n[plugins]\n';
-      selectedPlugins.forEach(p => {
+      selectedPluginIds_.forEach(p => {
         const pKey = p.id.replace(/-/g, '_');
         const vKey = p.id.replace(/-/g, '_');
         toml += `${pKey} = { id = "${p.pluginId}", version.ref = "${vKey}" }\n`;

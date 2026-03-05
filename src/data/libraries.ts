@@ -8,6 +8,7 @@ export interface Library {
   description: string;
   category: 'Compose' | 'Networking' | 'Architecture' | 'UI' | 'Testing' | 'Utilities' | 'DI' | 'Data' | 'KMP' | 'Core';
   kmpPlatforms?: string[];
+  managedBy?: string;
 }
 
 export interface Plugin {
@@ -71,7 +72,8 @@ export const LIBRARIES: Library[] = [
     "stableVersion": "1.10.4",
     "latestVersion": "1.11.0-alpha06",
     "description": "Main Compose UI library",
-    "category": "Compose"
+    "category": "Compose",
+    "managedBy": "androidx-compose-bom"
   },
   {
     "id": "androidx-compose-ui-graphics",
@@ -81,7 +83,8 @@ export const LIBRARIES: Library[] = [
     "stableVersion": "1.10.4",
     "latestVersion": "1.11.0-alpha06",
     "description": "Compose Graphics",
-    "category": "Compose"
+    "category": "Compose",
+    "managedBy": "androidx-compose-bom"
   },
   {
     "id": "androidx-compose-ui-tooling",
@@ -91,7 +94,8 @@ export const LIBRARIES: Library[] = [
     "stableVersion": "1.10.4",
     "latestVersion": "1.11.0-alpha06",
     "description": "Compose Tooling (Debug)",
-    "category": "Compose"
+    "category": "Compose",
+    "managedBy": "androidx-compose-bom"
   },
   {
     "id": "androidx-compose-ui-tooling-preview",
@@ -101,7 +105,8 @@ export const LIBRARIES: Library[] = [
     "stableVersion": "1.10.4",
     "latestVersion": "1.11.0-alpha06",
     "description": "Compose Tooling Preview",
-    "category": "Compose"
+    "category": "Compose",
+    "managedBy": "androidx-compose-bom"
   },
   {
     "id": "androidx-compose-material3",
@@ -111,7 +116,8 @@ export const LIBRARIES: Library[] = [
     "stableVersion": "1.4.0",
     "latestVersion": "1.5.0-alpha15",
     "description": "Material Design 3 for Compose",
-    "category": "Compose"
+    "category": "Compose",
+    "managedBy": "androidx-compose-bom"
   },
   {
     "id": "androidx-compose-material-icons",
@@ -121,7 +127,8 @@ export const LIBRARIES: Library[] = [
     "stableVersion": "1.7.8",
     "latestVersion": "1.7.8",
     "description": "Full set of Material icons",
-    "category": "Compose"
+    "category": "Compose",
+    "managedBy": "androidx-compose-bom"
   },
   {
     "id": "androidx-navigation3-runtime",
@@ -316,7 +323,8 @@ export const LIBRARIES: Library[] = [
     "stableVersion": "1.10.4",
     "latestVersion": "1.11.0-alpha06",
     "description": "Compose testing support",
-    "category": "Testing"
+    "category": "Testing",
+    "managedBy": "androidx-compose-bom"
   },
   {
     "id": "androidx-compose-ui-test-manifest",
@@ -326,7 +334,8 @@ export const LIBRARIES: Library[] = [
     "stableVersion": "1.10.4",
     "latestVersion": "1.11.0-alpha06",
     "description": "Manifest for Compose testing",
-    "category": "Testing"
+    "category": "Testing",
+    "managedBy": "androidx-compose-bom"
   }
 ];
 

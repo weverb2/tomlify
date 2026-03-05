@@ -56,7 +56,6 @@ async function updateVersions() {
     let group = p.group || p.pluginId;
     let artifact = p.artifact || `${p.pluginId}.gradle.plugin`;
 
-    // Special cases for AGP and Spotless
     if (p.id === 'android-application') {
       group = 'com.android.tools.build';
       artifact = 'gradle';
@@ -80,6 +79,7 @@ async function updateVersions() {
   description: string;
   category: 'Compose' | 'Networking' | 'Architecture' | 'UI' | 'Testing' | 'Utilities' | 'DI' | 'Data' | 'KMP' | 'Core';
   kmpPlatforms?: string[];
+  managedBy?: string;
 }
 
 export interface Plugin {
