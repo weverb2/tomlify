@@ -5,7 +5,7 @@ import react from '@astrojs/react';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://bwever.github.io',
+  site: 'https://weverb2.github.io',
   base: '/tomlify',
   integrations: [react()]
 });

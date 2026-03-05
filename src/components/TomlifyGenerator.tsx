@@ -196,7 +196,7 @@ const TomlifyGenerator: React.FC = () => {
 
         <div className="sidebar-footer">
           <a 
-            href="https://github.com/bwever/tomlify/issues/new?title=Library+Request"
+            href="https://github.com/weverb2/tomlify/issues/new?title=Library+Request"
             target="_blank"
             rel="noopener noreferrer"
             className="request-link"

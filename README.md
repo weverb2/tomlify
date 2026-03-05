@@ -15,7 +15,7 @@ Built with **Astro**, **React**, and a lot of Kotlin love.
 
 ## Live Demo 🌍
 
-[https://bwever.github.io/tomlify/](https://bwever.github.io/tomlify/)
+[https://weverb2.github.io/tomlify/](https://weverb2.github.io/tomlify/)
 
 ## How it works 🛠️
 
