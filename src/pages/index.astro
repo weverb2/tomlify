@@ -1,0 +1,80 @@
+---
+import TomlifyGenerator from '../components/TomlifyGenerator';
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>tomlify - Android TOML Generator</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+	</head>
+	<body>
+		<header>
+			<div class="container">
+				<h1>tomlify</h1>
+				<p>The Android dependency catalog generator.</p>
+			</div>
+		</header>
+		<main class="container">
+			<TomlifyGenerator client:load />
+		</main>
+		<footer>
+			<div class="container">
+				<p>Built with Astro & React</p>
+			</div>
+		</footer>
+	</body>
+</html>
+
+<style is:global>
+	:root {
+		--primary: #3ddc84; /* Android Green */
+		--primary-dark: #073042;
+		--text: #212529;
+		--bg: #ffffff;
+	}
+	* {
+		box-sizing: border-box;
+	}
+	body {
+		margin: 0;
+		font-family: 'Inter', system-ui, sans-serif;
+		color: var(--text);
+		background-color: var(--bg);
+		line-height: 1.6;
+	}
+	.container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 1rem;
+	}
+	header {
+		background-color: var(--primary-dark);
+		color: white;
+		padding: 3rem 0;
+		margin-bottom: 2rem;
+		border-bottom: 4px solid var(--primary);
+	}
+	header h1 {
+		margin: 0;
+		font-size: 3rem;
+		font-weight: 700;
+	}
+	header p {
+		margin: 0.5rem 0 0;
+		font-size: 1.2rem;
+		opacity: 0.9;
+	}
+	footer {
+		margin-top: 4rem;
+		padding: 2rem 0;
+		border-top: 1px solid #dee2e6;
+		color: #6c757d;
+		text-align: center;
+	}
+</style>
