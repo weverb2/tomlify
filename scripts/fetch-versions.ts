@@ -8,51 +8,60 @@ const MAVEN_CENTRAL = 'https://repo1.maven.org/maven2';
 
 async function fetchMetadata(group: string, artifact: string): Promise<{ stable: string, latest: string } | null> {
   const groupPath = group.replace(/\./g, '/');
-  const url = group.startsWith('androidx') || group.startsWith('com.google') || group.startsWith('com.android')
-    ? `${GOOGLE_MAVEN}/${groupPath}/${artifact}/maven-metadata.xml`
-    : `${MAVEN_CENTRAL}/${groupPath}/${artifact}/maven-metadata.xml`;
+  const urls = [
+    `${MAVEN_CENTRAL}/${groupPath}/${artifact}/maven-metadata.xml`,
+    `${GOOGLE_MAVEN}/${groupPath}/${artifact}/maven-metadata.xml`
+  ];
 
-  try {
-    const response = await fetch(url);
-    if (!response.ok) return null;
-    
-    const xml = await response.text();
-    const result = await parseStringPromise(xml);
-    const versioning = result.metadata.versioning[0];
-    
-    return {
-      stable: versioning.release?.[0] || versioning.latest?.[0],
-      latest: versioning.latest?.[0] || versioning.release?.[0]
-    };
-  } catch (e) {
-    return null;
+  for (const url of urls) {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) continue;
+      
+      const xml = await response.text();
+      const result = await parseStringPromise(xml);
+      const versioning = result.metadata.versioning[0];
+      
+      let stable = versioning.release?.[0];
+      if (!stable) {
+        const allVersions = versioning.versions[0].version;
+        stable = [...allVersions].reverse().find((v: string) => 
+          !v.toLowerCase().includes('alpha') && 
+          !v.toLowerCase().includes('beta') && 
+          !v.toLowerCase().includes('rc') && 
+          !v.toLowerCase().includes('m')
+        ) || allVersions[allVersions.length - 1];
+      }
+
+      return {
+        stable: stable,
+        latest: versioning.latest?.[0] || stable
+      };
+    } catch (e) {
+      continue;
+    }
   }
+  return null;
 }
 
 async function updateVersions() {
   console.log('Fetching latest and stable versions...');
   
   const updatedLibs = await Promise.all(LIBRARIES.map(async (lib) => {
-    if (lib.stableVersion === '' && lib.id !== 'compose-bom') return lib;
+    if (lib.artifact === '') return lib;
     const meta = await fetchMetadata(lib.group, lib.artifact);
     if (!meta) return lib;
-    console.log(`- ${lib.name}: Stable: ${meta.stable}, Latest: ${meta.latest}`);
     return { ...lib, stableVersion: meta.stable, latestVersion: meta.latest };
   }));
 
   const updatedPlugins = await Promise.all(PLUGINS.map(async (p) => {
-    let group = '', artifact = '';
-    if (p.pluginId.startsWith('org.jetbrains.kotlin')) {
-      group = 'org.jetbrains.kotlin';
-      artifact = 'kotlin-stdlib';
-    } else if (p.pluginId.startsWith('androidx')) {
-      group = p.pluginId;
-      artifact = p.id;
-    }
+    // Determine coordinates: Explicitly defined OR Marker pattern (pluginId:pluginId.gradle.plugin)
+    const group = p.group || p.pluginId;
+    const artifact = p.artifact || `${p.pluginId}.gradle.plugin`;
 
-    if (group && artifact) {
-      const meta = await fetchMetadata(group, artifact);
-      if (meta) return { ...p, stableVersion: meta.stable, latestVersion: meta.latest };
+    const meta = await fetchMetadata(group, artifact);
+    if (meta) {
+      return { ...p, stableVersion: meta.stable, latestVersion: meta.latest };
     }
     return p;
   }));
@@ -74,6 +83,8 @@ export interface Plugin {
   id: string;
   name: string;
   pluginId: string;
+  group?: string;
+  artifact?: string;
   stableVersion: string;
   latestVersion: string;
   description: string;
