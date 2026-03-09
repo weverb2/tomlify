@@ -379,6 +379,343 @@ export const LIBRARIES: Library[] = [
     "category": "Architecture"
   },
   {
+    "id": "circuit-bom",
+    "name": "Circuit BOM",
+    "group": "com.slack.circuit",
+    "artifact": "circuit-bom",
+    "stableVersion": "",
+    "latestVersion": "",
+    "description": "Bill of Materials for Slack Circuit",
+    "category": "Architecture"
+  },
+  {
+    "id": "circuit-backstack",
+    "name": "Circuit Backstack",
+    "group": "com.slack.circuit",
+    "artifact": "circuit-backstack",
+    "stableVersion": "0.33.1",
+    "latestVersion": "0.33.1",
+    "description": "Manages navigation history in Compose applications",
+    "category": "Architecture",
+    "managedBy": "circuit-bom",
+    "kmpPlatforms": [
+      "android",
+      "ios",
+      "jvm",
+      "wasm",
+      "js",
+      "macos"
+    ]
+  },
+  {
+    "id": "circuit-codegen-annotations",
+    "name": "Circuit Codegen Annotations",
+    "group": "com.slack.circuit",
+    "artifact": "circuit-codegen-annotations",
+    "stableVersion": "0.33.1",
+    "latestVersion": "0.33.1",
+    "description": "Annotations for Circuit code generation",
+    "category": "Architecture",
+    "managedBy": "circuit-bom",
+    "kmpPlatforms": [
+      "android",
+      "ios",
+      "jvm",
+      "wasm",
+      "js",
+      "macos",
+      "linux",
+      "windows",
+      "tvos",
+      "watchos"
+    ]
+  },
+  {
+    "id": "circuit-foundation",
+    "name": "Circuit Foundation",
+    "group": "com.slack.circuit",
+    "artifact": "circuit-foundation",
+    "stableVersion": "0.33.1",
+    "latestVersion": "0.33.1",
+    "description": "Unidirectional data flow architecture components",
+    "category": "Architecture",
+    "managedBy": "circuit-bom",
+    "kmpPlatforms": [
+      "android",
+      "ios",
+      "jvm",
+      "wasm",
+      "js",
+      "macos"
+    ]
+  },
+  {
+    "id": "circuit-overlay",
+    "name": "Circuit Overlay",
+    "group": "com.slack.circuit",
+    "artifact": "circuit-overlay",
+    "stableVersion": "0.33.1",
+    "latestVersion": "0.33.1",
+    "description": "Display composable overlays atop existing UI",
+    "category": "Architecture",
+    "managedBy": "circuit-bom",
+    "kmpPlatforms": [
+      "android",
+      "ios",
+      "jvm",
+      "wasm",
+      "js",
+      "macos"
+    ]
+  },
+  {
+    "id": "circuit-retained",
+    "name": "Circuit Retained",
+    "group": "com.slack.circuit",
+    "artifact": "circuit-retained",
+    "stableVersion": "0.33.1",
+    "latestVersion": "0.33.1",
+    "description": "State retention across configuration changes",
+    "category": "Architecture",
+    "managedBy": "circuit-bom",
+    "kmpPlatforms": [
+      "android",
+      "ios",
+      "jvm",
+      "wasm",
+      "js",
+      "macos",
+      "linux",
+      "windows",
+      "tvos",
+      "watchos"
+    ]
+  },
+  {
+    "id": "circuit-runtime",
+    "name": "Circuit Runtime",
+    "group": "com.slack.circuit",
+    "artifact": "circuit-runtime",
+    "stableVersion": "0.33.1",
+    "latestVersion": "0.33.1",
+    "description": "Navigation and state management core components",
+    "category": "Architecture",
+    "managedBy": "circuit-bom",
+    "kmpPlatforms": [
+      "android",
+      "ios",
+      "jvm",
+      "wasm",
+      "js",
+      "macos",
+      "linux",
+      "windows",
+      "tvos",
+      "watchos"
+    ]
+  },
+  {
+    "id": "circuit-runtime-navigation",
+    "name": "Circuit Runtime Navigation",
+    "group": "com.slack.circuit",
+    "artifact": "circuit-runtime-navigation",
+    "stableVersion": "0.33.1",
+    "latestVersion": "0.33.1",
+    "description": "Circuit navigation core",
+    "category": "Architecture",
+    "managedBy": "circuit-bom",
+    "kmpPlatforms": [
+      "android",
+      "ios",
+      "jvm",
+      "wasm",
+      "js",
+      "macos",
+      "linux",
+      "windows",
+      "tvos",
+      "watchos"
+    ]
+  },
+  {
+    "id": "circuit-runtime-presenter",
+    "name": "Circuit Runtime Presenter",
+    "group": "com.slack.circuit",
+    "artifact": "circuit-runtime-presenter",
+    "stableVersion": "0.33.1",
+    "latestVersion": "0.33.1",
+    "description": "Circuit presenter core components",
+    "category": "Architecture",
+    "managedBy": "circuit-bom",
+    "kmpPlatforms": [
+      "android",
+      "ios",
+      "jvm",
+      "wasm",
+      "js",
+      "macos",
+      "linux",
+      "windows",
+      "tvos",
+      "watchos"
+    ]
+  },
+  {
+    "id": "circuit-runtime-screen",
+    "name": "Circuit Runtime Screen",
+    "group": "com.slack.circuit",
+    "artifact": "circuit-runtime-screen",
+    "stableVersion": "0.33.1",
+    "latestVersion": "0.33.1",
+    "description": "Circuit screen core components",
+    "category": "Architecture",
+    "managedBy": "circuit-bom",
+    "kmpPlatforms": [
+      "android",
+      "ios",
+      "jvm",
+      "wasm",
+      "js",
+      "macos",
+      "linux",
+      "windows",
+      "tvos",
+      "watchos"
+    ]
+  },
+  {
+    "id": "circuit-runtime-ui",
+    "name": "Circuit Runtime UI",
+    "group": "com.slack.circuit",
+    "artifact": "circuit-runtime-ui",
+    "stableVersion": "0.33.1",
+    "latestVersion": "0.33.1",
+    "description": "Circuit UI core components",
+    "category": "Architecture",
+    "managedBy": "circuit-bom",
+    "kmpPlatforms": [
+      "android",
+      "ios",
+      "jvm",
+      "wasm",
+      "js",
+      "macos"
+    ]
+  },
+  {
+    "id": "circuit-sharedelements",
+    "name": "Circuit Shared Elements",
+    "group": "com.slack.circuit",
+    "artifact": "circuit-sharedelements",
+    "stableVersion": "0.33.1",
+    "latestVersion": "0.33.1",
+    "description": "Circuit shared element transitions",
+    "category": "Architecture",
+    "managedBy": "circuit-bom",
+    "kmpPlatforms": [
+      "android",
+      "ios",
+      "jvm",
+      "wasm",
+      "js",
+      "macos"
+    ]
+  },
+  {
+    "id": "circuit-test",
+    "name": "Circuit Test",
+    "group": "com.slack.circuit",
+    "artifact": "circuit-test",
+    "stableVersion": "0.33.1",
+    "latestVersion": "0.33.1",
+    "description": "Testing utilities for Circuit presenters and UI",
+    "category": "Testing",
+    "managedBy": "circuit-bom",
+    "kmpPlatforms": [
+      "android",
+      "ios",
+      "jvm",
+      "wasm",
+      "js",
+      "macos"
+    ]
+  },
+  {
+    "id": "circuitx-effects",
+    "name": "CircuitX Effects",
+    "group": "com.slack.circuit",
+    "artifact": "circuitx-effects",
+    "stableVersion": "0.33.1",
+    "latestVersion": "0.33.1",
+    "description": "CircuitX side effects extension",
+    "category": "Architecture",
+    "managedBy": "circuit-bom",
+    "kmpPlatforms": [
+      "android",
+      "ios",
+      "jvm",
+      "wasm",
+      "js",
+      "macos"
+    ]
+  },
+  {
+    "id": "circuitx-gesture-navigation",
+    "name": "CircuitX Gesture Navigation",
+    "group": "com.slack.circuit",
+    "artifact": "circuitx-gesture-navigation",
+    "stableVersion": "0.33.1",
+    "latestVersion": "0.33.1",
+    "description": "CircuitX gesture-based navigation",
+    "category": "Architecture",
+    "managedBy": "circuit-bom",
+    "kmpPlatforms": [
+      "android",
+      "ios",
+      "jvm",
+      "wasm",
+      "js"
+    ]
+  },
+  {
+    "id": "circuitx-navigation",
+    "name": "CircuitX Navigation",
+    "group": "com.slack.circuit",
+    "artifact": "circuitx-navigation",
+    "stableVersion": "0.33.1",
+    "latestVersion": "0.33.1",
+    "description": "Additional navigation helpers for Circuit",
+    "category": "Architecture",
+    "managedBy": "circuit-bom",
+    "kmpPlatforms": [
+      "android",
+      "ios",
+      "jvm",
+      "wasm",
+      "js",
+      "macos"
+    ]
+  },
+  {
+    "id": "circuitx-overlays",
+    "name": "CircuitX Overlays",
+    "group": "com.slack.circuit",
+    "artifact": "circuitx-overlays",
+    "stableVersion": "0.33.1",
+    "latestVersion": "0.33.1",
+    "description": "Additional overlay helpers for Circuit",
+    "category": "Architecture",
+    "managedBy": "circuit-bom",
+    "kmpPlatforms": [
+      "android",
+      "ios",
+      "jvm",
+      "wasm",
+      "js",
+      "macos"
+    ]
+  },
+  {
     "id": "coil-core",
     "name": "Coil Core",
     "group": "io.coil-kt.coil3",
