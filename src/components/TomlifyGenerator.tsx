@@ -40,9 +40,9 @@ const TomlifyGenerator: React.FC = () => {
 
   const generateToml = () => {
     const selectedLibs = LIBRARIES.filter(lib => selectedLibIds.has(lib.id));
-    const selectedPluginIds_ = PLUGINS.filter(p => selectedPluginIds.has(p.id));
+    const selectedPlugins_ = PLUGINS.filter(p => selectedPluginIds.has(p.id));
 
-    if (selectedLibs.length === 0 && selectedPluginIds_.length === 0) {
+    if (selectedLibs.length === 0 && selectedPlugins_.length === 0) {
       return '# Select dependencies or plugins to generate libs.versions.toml';
     }
 
@@ -53,8 +53,14 @@ const TomlifyGenerator: React.FC = () => {
       return versionType === 'stable' ? item.stableVersion : item.latestVersion;
     };
 
+    const getVersionKey = (id: string) => {
+      // Standardize version keys to camelCase for Gradle convenience, 
+      // but keeping keys as hyphens for libraries/plugins themselves.
+      return id.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+    };
+
     const addVersion = (id: string, version: string) => {
-      const vKey = id.replace(/-/g, '_');
+      const vKey = getVersionKey(id);
       if (version && !versionsAdded.has(vKey)) {
         toml += `${vKey} = "${version}"\n`;
         versionsAdded.add(vKey);
@@ -69,13 +75,13 @@ const TomlifyGenerator: React.FC = () => {
       }
     });
     
-    selectedPluginIds_.forEach(p => addVersion(p.id, getVersion(p)));
+    selectedPlugins_.forEach(p => addVersion(p.id, getVersion(p)));
 
     if (selectedLibs.length > 0) {
       toml += '\n[libraries]\n';
       selectedLibs.forEach(lib => {
-        const libKey = lib.id.replace(/-/g, '_');
-        const vKey = lib.id.replace(/-/g, '_');
+        const libKey = lib.id; // Keep hyphenated
+        const vKey = getVersionKey(lib.id);
         const isManagedBySelectedBom = lib.managedBy && selectedLibIds.has(lib.managedBy);
 
         if (isManagedBySelectedBom) {
@@ -88,11 +94,11 @@ const TomlifyGenerator: React.FC = () => {
       });
     }
 
-    if (selectedPluginIds_.length > 0) {
+    if (selectedPlugins_.length > 0) {
       toml += '\n[plugins]\n';
-      selectedPluginIds_.forEach(p => {
-        const pKey = p.id.replace(/-/g, '_');
-        const vKey = p.id.replace(/-/g, '_');
+      selectedPlugins_.forEach(p => {
+        const pKey = p.id; // Keep hyphenated
+        const vKey = getVersionKey(p.id);
         toml += `${pKey} = { id = "${p.pluginId}", version.ref = "${vKey}" }\n`;
       });
     }
